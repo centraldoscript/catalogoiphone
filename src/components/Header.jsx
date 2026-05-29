@@ -1,4 +1,4 @@
-import { Search, X } from 'lucide-react'
+import { Search, X, Wrench } from 'lucide-react'
 
 export default function Header({ appName, searchQuery, setSearchQuery }) {
   return (
@@ -16,27 +16,35 @@ export default function Header({ appName, searchQuery, setSearchQuery }) {
         </a>
       </div>
 
-      {setSearchQuery !== undefined && (
-        <div className="search-bar">
-          <Search size={18} className="search-icon" />
-          <input
-            type="text"
-            placeholder="Buscar modelo, GB ou condição..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              className="clear-search"
-              onClick={() => setSearchQuery('')}
-              title="Limpar busca"
-            >
-              <X size={16} />
-            </button>
-          )}
-        </div>
-      )}
+      <div className="header-actions">
+        {setSearchQuery !== undefined && (
+          <div className="search-bar">
+            <Search size={18} className="search-icon" />
+            <input
+              type="text"
+              placeholder="Buscar modelo, GB..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                className="clear-search"
+                onClick={() => setSearchQuery('')}
+                title="Limpar busca"
+              >
+                <X size={16} />
+              </button>
+            )}
+          </div>
+        )}
+
+        <a href="/assistencia" className="btn-header-assistance">
+          <Wrench size={15} />
+          <span>Assistência Técnica</span>
+        </a>
+      </div>
     </header>
   )
 }
+
