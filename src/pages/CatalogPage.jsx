@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase.js'
 import Header from '../components/Header.jsx'
 import { Package, Search, X, CreditCard, Plane, Sparkles, RefreshCw } from 'lucide-react'
@@ -6,6 +7,7 @@ import CategoryIcon from '../components/CategoryIcon.jsx'
 import CatalogGrid from '../components/CatalogGrid.jsx'
 
 export default function CatalogPage() {
+  const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('all')
@@ -116,7 +118,7 @@ export default function CatalogPage() {
   })
 
   const activeCategories = categories.filter(cat =>
-    products.some(p => p.category_id === cat.id)
+    cat.slug === 'assistencia' || products.some(p => p.category_id === cat.id)
   )
 
   return (
@@ -166,7 +168,13 @@ export default function CatalogPage() {
                     <button
                       key={cat.id}
                       className={`filter-btn ${selectedCategory === cat.id ? 'active' : ''}`}
-                      onClick={() => setSelectedCategory(cat.id)}
+                      onClick={() => {
+                        if (cat.slug === 'assistencia') {
+                          navigate('/assistencia')
+                        } else {
+                          setSelectedCategory(cat.id)
+                        }
+                      }}
                     >
                       <CategoryIcon name={cat.icon} size={16} /> {cat.name}
                     </button>

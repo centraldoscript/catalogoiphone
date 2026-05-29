@@ -1866,3 +1866,164 @@ select option {
   box-shadow: 0 0 15px rgba(235, 94, 26, 0.2);
 }
 
+/* ── ASSISTÊNCIA TÉCNICA PAGE ── */
+.assistance-page {
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+.assistance-hero {
+  text-align: center;
+  padding: 60px 20px 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.assistance-hero h1 {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #ffffff 40%, #a5a5a5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.assistance-hero p {
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.assistance-sections {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.assistance-category-card {
+  background: var(--bg-card-dark);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.assistance-category-banner {
+  background: linear-gradient(to right, rgba(28, 6, 60, 0.9), rgba(19, 2, 44, 0.95)), url('/src/assets/hero.png');
+  background-size: cover;
+  background-position: center;
+  padding: 40px 30px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+}
+
+.assistance-category-banner h2 {
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #ffffff 40%, #b8a3cc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.assistance-table {
+  padding: 20px 40px;
+}
+
+.assistance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.assistance-row:last-child {
+  border-bottom: none;
+}
+
+.assistance-model-info {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.assistance-main-model {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.assistance-secondary-models {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 350;
+}
+
+.assistance-divider-vertical {
+  width: 1px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 0 40px;
+  flex-shrink: 0;
+}
+
+.assistance-price-info {
+  width: 150px;
+  text-align: left;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+}
+
+.assistance-price-symbol {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-right: 4px;
+}
+
+@media (max-width: 600px) {
+  .assistance-hero h1 {
+    font-size: 32px;
+  }
+  .assistance-hero p {
+    font-size: 14px;
+  }
+  .assistance-category-banner h2 {
+    font-size: 28px;
+  }
+  .assistance-row {
+    padding: 16px 0;
+  }
+  .assistance-table {
+    padding: 15px 20px;
+  }
+  .assistance-main-model {
+    font-size: 17px;
+  }
+  .assistance-secondary-models {
+    font-size: 12px;
+  }
+  .assistance-divider-vertical {
+    margin: 0 15px;
+    height: 30px;
+  }
+  .assistance-price-info {
+    width: 100px;
+    font-size: 18px;
+  }
+  .assistance-price-symbol {
+    font-size: 11px;
+  }
+}
+
+

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase.js'
-import { LogOut, Smartphone, Plus, Edit, Trash2, X, Folder, Package, Tag, Wrench, Headphones, Gamepad2, RefreshCw, Volume2, Tv, Gift, ShoppingBag } from 'lucide-react'
+import { LogOut, Smartphone, Plus, Edit, Trash2, X, Folder, Package, Tag, Wrench, Headphones, Gamepad2, RefreshCw, Volume2, Tv, Gift, ShoppingBag, Settings } from 'lucide-react'
 import CategoryIcon from '../components/CategoryIcon.jsx'
 import { removeBackground } from '@imgly/background-removal'
 import CardPremiumDark from '../components/CardPremiumDark.jsx'
@@ -78,6 +78,26 @@ export default function AdminPage() {
   // Category edit states
   const [editingCategory, setEditingCategory] = useState(null)
   const [categoryForm, setCategoryForm] = useState(emptyCategoryForm)
+
+  // Assistance edit states
+  const [assistanceSections, setAssistanceSections] = useState([])
+  const [editingAssistanceSection, setEditingAssistanceSection] = useState(null)
+  const emptyAssistanceSectionForm = {
+    name: '',
+    sort_order: 0,
+  }
+  const [assistanceSectionForm, setAssistanceSectionForm] = useState(emptyAssistanceSectionForm)
+
+  const [assistancePrices, setAssistancePrices] = useState([])
+  const [editingAssistance, setEditingAssistance] = useState(null)
+  const emptyAssistanceForm = {
+    section_id: '',
+    main_model: '',
+    secondary_models: '',
+    price: '',
+    sort_order: 0,
+  }
+  const [assistanceForm, setAssistanceForm] = useState(emptyAssistanceForm)
 
   const [saving, setSaving] = useState(false)
   const [removingBg, setRemovingBg] = useState(false)
@@ -213,8 +233,119 @@ export default function AdminPage() {
     if (user) {
       setNewEmail(user.email || '')
     }
-    await Promise.all([loadCategories(), loadProducts(), loadSettings()])
+    await Promise.all([loadCategories(), loadProducts(), loadAssistanceSections(), loadAssistancePrices(), loadSettings()])
     setLoadingList(false)
+  }
+
+  async function loadAssistanceSections() {
+    const { data } = await supabase
+      .from('assistance_sections')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true })
+    setAssistanceSections(data || [])
+    return data || []
+  }
+
+  async function loadAssistancePrices() {
+    const { data } = await supabase
+      .from('assistance_prices')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true })
+    setAssistancePrices(data || [])
+    return data || []
+  }
+
+  async function handleAssistanceSectionSubmit(e) {
+    e.preventDefault()
+    if (!assistanceSectionForm.name) {
+      alert('Preencha o nome da seção.')
+      return
+    }
+    setSaving(true)
+
+    try {
+      const payload = {
+        name: assistanceSectionForm.name,
+        sort_order: parseInt(assistanceSectionForm.sort_order, 10) || 0,
+      }
+
+      let error
+      if (editingAssistanceSection) {
+        ;({ error } = await supabase.from('assistance_sections').update(payload).eq('id', editingAssistanceSection.id))
+      } else {
+        ;({ error } = await supabase.from('assistance_sections').insert(payload))
+      }
+
+      if (error) throw error
+
+      setDrawerOpen(false)
+      setEditingAssistanceSection(null)
+      setAssistanceSectionForm(emptyAssistanceSectionForm)
+      await loadAssistanceSections()
+      await loadAssistancePrices() // Atualiza listagem de preços para sincronizar nomes de seções
+    } catch (err) {
+      alert('Erro ao salvar seção de assistência: ' + err.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function handleAssistanceSubmit(e) {
+    e.preventDefault()
+    if (!assistanceForm.section_id || !assistanceForm.main_model || !assistanceForm.price) {
+      alert('Preencha a seção, modelo principal e preço.')
+      return
+    }
+    setSaving(true)
+
+    try {
+      const priceVal = parseFloat(assistanceForm.price.toString().replace(/[^0-9,.-]/g, '').replace(',', '.'))
+      if (isNaN(priceVal)) {
+        alert('Formato de preço inválido.')
+        return
+      }
+
+      const payload = {
+        section_id: assistanceForm.section_id,
+        main_model: assistanceForm.main_model,
+        secondary_models: assistanceForm.secondary_models,
+        price: priceVal,
+        sort_order: parseInt(assistanceForm.sort_order, 10) || 0,
+      }
+
+      let error
+      if (editingAssistance) {
+        ;({ error } = await supabase.from('assistance_prices').update(payload).eq('id', editingAssistance.id))
+      } else {
+        ;({ error } = await supabase.from('assistance_prices').insert(payload))
+      }
+
+      if (error) throw error
+
+      setDrawerOpen(false)
+      setEditingAssistance(null)
+      setAssistanceForm(emptyAssistanceForm)
+      await loadAssistancePrices()
+    } catch (err) {
+      alert('Erro ao salvar preço de assistência: ' + err.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function handleAssistanceSectionDelete(id) {
+    if (!confirm('Remover esta seção? Todos os preços de consertos vinculados a ela serão deletados.')) return
+    await supabase.from('assistance_sections').delete().eq('id', id)
+    await loadAssistanceSections()
+    await loadAssistancePrices()
+  }
+
+  async function handleAssistanceDelete(id) {
+    if (!confirm('Remover este item de assistência?')) return
+    await supabase.from('assistance_prices').delete().eq('id', id)
+    await loadAssistancePrices()
   }
 
   // Preencher form do produto ao editar
@@ -256,6 +387,36 @@ export default function AdminPage() {
       setCategoryForm(emptyCategoryForm)
     }
   }, [editingCategory])
+
+  // Preencher form da seção de assistência ao editar
+  useEffect(() => {
+    if (editingAssistanceSection) {
+      setAssistanceSectionForm({
+        name: editingAssistanceSection.name || '',
+        sort_order: editingAssistanceSection.sort_order ?? 0,
+      })
+    } else {
+      setAssistanceSectionForm(emptyAssistanceSectionForm)
+    }
+  }, [editingAssistanceSection])
+
+  // Preencher form do preço de assistência ao editar
+  useEffect(() => {
+    if (editingAssistance) {
+      setAssistanceForm({
+        section_id: editingAssistance.section_id || '',
+        main_model: editingAssistance.main_model || '',
+        secondary_models: editingAssistance.secondary_models || '',
+        price: editingAssistance.price || '',
+        sort_order: editingAssistance.sort_order ?? 0,
+      })
+    } else {
+      setAssistanceForm({
+        ...emptyAssistanceForm,
+        section_id: assistanceSections[0]?.id || '',
+      })
+    }
+  }, [editingAssistance, assistanceSections])
 
   function resetProductForm() {
     setProductForm({
@@ -587,11 +748,18 @@ export default function AdminPage() {
             <Folder size={16} /> Categorias
           </button>
           <button
+            className={`sidebar-link ${activeTab === 'assistance' ? 'active' : ''}`}
+            onClick={() => setActiveTab('assistance')}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
+            <Wrench size={16} /> Assistência Técnica
+          </button>
+          <button
             className={`sidebar-link ${activeTab === 'settings' ? 'active' : ''}`}
             onClick={() => setActiveTab('settings')}
             style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
           >
-            <Wrench size={16} /> Configurações
+            <Settings size={16} /> Configurações
           </button>
         </aside>
 
@@ -786,7 +954,7 @@ export default function AdminPage() {
                 </table>
               )}
             </>
-          ) : (
+          ) : activeTab === 'categories' ? (
             <>
               <div className="admin-content-header">
                 <h2>Categorias Cadastradas</h2>
@@ -856,6 +1024,147 @@ export default function AdminPage() {
                 </table>
               )}
             </>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '50px' }}>
+              {/* Gerenciamento de Seções */}
+              <div>
+                <div className="admin-content-header" style={{ marginBottom: '16px' }}>
+                  <h2>Seções de Assistência Técnica</h2>
+                  <button
+                    className="btn primary"
+                    onClick={() => {
+                      setEditingAssistanceSection(null)
+                      setAssistanceSectionForm(emptyAssistanceSectionForm)
+                      setDrawerType('assistance_section')
+                      setDrawerOpen(true)
+                    }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <Plus size={16} /> Nova Seção
+                  </button>
+                </div>
+
+                {loadingList ? (
+                  <div style={{ textAlign: 'center', padding: '20px' }}><span className="spinner" /></div>
+                ) : (
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Nome da Seção</th>
+                        <th>Ordem de Exibição</th>
+                        <th style={{ width: '100px', textAlign: 'right' }}>Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {assistanceSections.map(sec => (
+                        <tr key={sec.id}>
+                          <td style={{ fontWeight: '600', color: 'var(--accent-gold)' }}>{sec.name}</td>
+                          <td>{sec.sort_order}</td>
+                          <td style={{ textAlign: 'right' }}>
+                            <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
+                              <button
+                                className="btn-icon"
+                                title="Editar Seção"
+                                onClick={() => {
+                                  setEditingAssistanceSection(sec)
+                                  setDrawerType('assistance_section')
+                                  setDrawerOpen(true)
+                                }}
+                              >
+                                <Edit size={14} />
+                              </button>
+                              <button
+                                className="btn-icon del"
+                                title="Excluir Seção"
+                                onClick={() => handleAssistanceSectionDelete(sec.id)}
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+
+              {/* Gerenciamento de Preços */}
+              <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '40px' }}>
+                <div className="admin-content-header" style={{ marginBottom: '16px' }}>
+                  <h2>Tabela de Preços de Assistência</h2>
+                  <button
+                    className="btn primary"
+                    onClick={() => {
+                      setEditingAssistance(null)
+                      setAssistanceForm({
+                        ...emptyAssistanceForm,
+                        section_id: assistanceSections[0]?.id || '',
+                      })
+                      setDrawerType('assistance_price')
+                      setDrawerOpen(true)
+                    }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                    disabled={assistanceSections.length === 0}
+                  >
+                    <Plus size={16} /> Novo Preço
+                  </button>
+                </div>
+
+                {loadingList ? (
+                  <div style={{ textAlign: 'center', padding: '20px' }}><span className="spinner" /></div>
+                ) : (
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Seção</th>
+                        <th>Modelo Principal</th>
+                        <th>Modelos Secundários</th>
+                        <th>Preço</th>
+                        <th>Ordem</th>
+                        <th style={{ width: '100px', textAlign: 'right' }}>Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {assistancePrices.map(item => {
+                        const sec = assistanceSections.find(s => s.id === item.section_id)
+                        return (
+                          <tr key={item.id}>
+                            <td style={{ fontWeight: '500', color: 'var(--text-muted)' }}>{sec ? sec.name : '-'}</td>
+                            <td style={{ fontWeight: '600' }}>{item.main_model}</td>
+                            <td style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{item.secondary_models || '-'}</td>
+                            <td>R$ {parseFloat(item.price).toFixed(2).replace('.', ',')}</td>
+                            <td>{item.sort_order}</td>
+                            <td style={{ textAlign: 'right' }}>
+                              <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
+                                <button
+                                  className="btn-icon"
+                                  title="Editar Preço"
+                                  onClick={() => {
+                                    setEditingAssistance(item)
+                                    setDrawerType('assistance_price')
+                                    setDrawerOpen(true)
+                                  }}
+                                >
+                                  <Edit size={14} />
+                                </button>
+                                <button
+                                  className="btn-icon del"
+                                  title="Excluir Preço"
+                                  onClick={() => handleAssistanceDelete(item.id)}
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            </div>
           )}
         </main>
       </div>
@@ -868,7 +1177,11 @@ export default function AdminPage() {
           <h3>
             {drawerType === 'product'
               ? (editingProduct ? 'Editar Produto' : 'Novo Produto')
-              : (editingCategory ? 'Editar Categoria' : 'Nova Categoria')
+              : drawerType === 'category'
+                ? (editingCategory ? 'Editar Categoria' : 'Nova Categoria')
+                : drawerType === 'assistance_section'
+                  ? (editingAssistanceSection ? 'Editar Seção de Assistência' : 'Nova Seção de Assistência')
+                  : (editingAssistance ? 'Editar Preço de Assistência' : 'Novo Preço de Assistência')
             }
           </h3>
           <button className="close-btn" onClick={() => setDrawerOpen(false)}>
@@ -1207,7 +1520,7 @@ export default function AdminPage() {
                 {saving ? <span className="spinner" /> : (editingProduct ? 'Salvar Alterações' : 'Adicionar ao Catálogo')}
               </button>
             </form>
-          ) : (
+          ) : drawerType === 'category' ? (
             <form id="category-form" onSubmit={handleCategorySubmit}>
               {/* Nome da Categoria */}
               <div className="form-group">
@@ -1272,6 +1585,124 @@ export default function AdminPage() {
                 disabled={saving}
               >
                 {saving ? <span className="spinner" /> : (editingCategory ? 'Salvar Categoria' : 'Criar Categoria')}
+              </button>
+            </form>
+          ) : drawerType === 'assistance_section' ? (
+            <form id="assistance-section-form" onSubmit={handleAssistanceSectionSubmit}>
+              {/* Nome da Seção */}
+              <div className="form-group">
+                <label htmlFor="sec-name">Nome da Seção (Ex: Tela, Bateria)</label>
+                <input
+                  id="sec-name"
+                  type="text"
+                  value={assistanceSectionForm.name}
+                  onChange={e => setAssistanceSectionForm(f => ({ ...f, name: e.target.value }))}
+                  placeholder="Ex: Tela"
+                  required
+                />
+              </div>
+
+              {/* Ordem de Exibição */}
+              <div className="form-group">
+                <label htmlFor="sec-sort">Ordem de Exibição</label>
+                <input
+                  id="sec-sort"
+                  type="number"
+                  value={assistanceSectionForm.sort_order}
+                  onChange={e => setAssistanceSectionForm(f => ({ ...f, sort_order: parseInt(e.target.value, 10) || 0 }))}
+                  placeholder="0"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="btn primary"
+                style={{ width: '100%', justifyContent: 'center', padding: '14px' }}
+                disabled={saving}
+              >
+                {saving ? <span className="spinner" /> : (editingAssistanceSection ? 'Salvar Alterações' : 'Criar Seção')}
+              </button>
+            </form>
+          ) : (
+            <form id="assistance-form" onSubmit={handleAssistanceSubmit}>
+              {/* Seção da Assistência */}
+              <div className="form-group">
+                <label htmlFor="ast-section">Seção da Assistência</label>
+                <select
+                  id="ast-section"
+                  value={assistanceForm.section_id}
+                  onChange={e => setAssistanceForm(f => ({ ...f, section_id: e.target.value }))}
+                  required
+                >
+                  <option value="">Selecione uma Seção</option>
+                  {assistanceSections.map(sec => (
+                    <option key={sec.id} value={sec.id}>
+                      {sec.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Modelo Principal */}
+              <div className="form-group">
+                <label htmlFor="ast-main">Modelo Principal</label>
+                <input
+                  id="ast-main"
+                  type="text"
+                  value={assistanceForm.main_model}
+                  onChange={e => setAssistanceForm(f => ({ ...f, main_model: e.target.value }))}
+                  placeholder="Ex: iPhone X"
+                  required
+                />
+              </div>
+
+              {/* Modelos Secundários */}
+              <div className="form-group">
+                <label htmlFor="ast-secondary">Modelos Secundários (separados por vírgula)</label>
+                <input
+                  id="ast-secondary"
+                  type="text"
+                  value={assistanceForm.secondary_models}
+                  onChange={e => setAssistanceForm(f => ({ ...f, secondary_models: e.target.value }))}
+                  placeholder="Ex: XR, XS"
+                />
+              </div>
+
+              {/* Preço */}
+              <div className="form-group">
+                <label htmlFor="ast-price">Preço (R$)</label>
+                <input
+                  id="ast-price"
+                  type="number"
+                  step="0.01"
+                  value={assistanceForm.price}
+                  onChange={e => setAssistanceForm(f => ({ ...f, price: e.target.value }))}
+                  placeholder="Ex: 299.90"
+                  required
+                />
+              </div>
+
+              {/* Ordem de Exibição */}
+              <div className="form-group">
+                <label htmlFor="ast-sort">Ordem de Exibição</label>
+                <input
+                  id="ast-sort"
+                  type="number"
+                  value={assistanceForm.sort_order}
+                  onChange={e => setAssistanceForm(f => ({ ...f, sort_order: parseInt(e.target.value, 10) || 0 }))}
+                  placeholder="0"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="btn primary"
+                style={{ width: '100%', justifyContent: 'center', padding: '14px' }}
+                disabled={saving}
+              >
+                {saving ? <span className="spinner" /> : (editingAssistance ? 'Salvar Alterações' : 'Criar Item de Preço')}
               </button>
             </form>
           )}
