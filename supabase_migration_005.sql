@@ -79,19 +79,16 @@ insert into public.assistance_prices (section_id, main_model, secondary_models, 
 
 -- Seeds oficiais para Preços (Bateria)
 insert into public.assistance_prices (section_id, main_model, secondary_models, price, sort_order) values
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 5', '5s, 5c, SE', 120.00, 1),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 6', '6s', 130.00, 2),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 6 Plus', '6s Plus', 140.00, 3),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 7', '8, SE 2', 140.00, 4),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 7 Plus', '8 Plus', 150.00, 5),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone X', 'XS, XR', 180.00, 6),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone XS Max', null, 200.00, 7),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 11', null, 220.00, 8),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 11 Pro', '11 Pro Max', 250.00, 9),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 12 / 12 Pro', '12 Mini, 12 Pro Max', 290.00, 10),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 13 / 13 Mini', '13 Pro, 13 Pro Max', 350.00, 11),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 14 / 14 Plus', '14 Pro, 14 Pro Max', 450.00, 12),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 15 / 15 Plus', '15 Pro, 15 Pro Max', 550.00, 13);
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 6', '6s, 6s plus, 6 plus', 149.00, 1),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 7', '8', 140.00, 2),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 7 plus', '8 plus', 169.00, 3),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone x', 'xs, xr, xs max', 199.00, 4),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 11', '11 pro, 11 pro max', 249.00, 5),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 12', '12 pro, 12 pro max', 269.00, 6),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 13', '13 pro, 13 pro max', 349.00, 7),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 14', '14 plus, 14 pro, 14 pro max', 399.00, 8),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 15', '15 plus, 15 pro, 15 pro max', 450.00, 9),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'iPhone 16', '16 pro, 16 pro max', 500.00, 10);
 
 -- Seeds oficiais para Preços (Vidro Traseiro)
 insert into public.assistance_prices (section_id, main_model, secondary_models, price, sort_order) values
