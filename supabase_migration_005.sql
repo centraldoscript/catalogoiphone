@@ -92,22 +92,13 @@ insert into public.assistance_prices (section_id, main_model, secondary_models, 
 
 -- Seeds oficiais para Preços (Vidro Traseiro)
 insert into public.assistance_prices (section_id, main_model, secondary_models, price, sort_order) values
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 8', null, 190.00, 1),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 8 Plus', null, 220.00, 2),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone XR', null, 220.00, 3),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone X', 'XS', 220.00, 4),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone XS Max', null, 250.00, 5),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 11', null, 250.00, 6),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 11 Pro', null, 290.00, 7),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 11 Pro Max', null, 320.00, 8),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 12', '12 Mini', 350.00, 9),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 12 Pro', '12 Pro Max', 390.00, 10),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 13', '13 Mini', 390.00, 11),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 13 Pro', '13 Pro Max', 490.00, 12),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 14', '14 Plus', 450.00, 13),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 14 Pro', '14 Pro Max', 690.00, 14),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 15', '15 Plus', 490.00, 15),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 15 Pro', '15 Pro Max', 790.00, 16);
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 8', '8 plus, x, xr, xs, xs max', 170.00, 1),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 11', '11 pro, 11 pro max', 200.00, 2),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 12', '12 pro, 12 pro max', 270.00, 3),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 13', '13 pro, 13 pro max', 300.00, 4),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 14', '14 plus, 14 pro, 14 pro max', 350.00, 5),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 15', '15 pro, 15 plus, 15 pro max', 400.00, 6),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'iPhone 16', '16 plus, 16 pro, 16 pro max', 500.00, 7);
 
 -- Seeds oficiais para Preços (Reparos em Placa)
 insert into public.assistance_prices (section_id, main_model, secondary_models, price, sort_order) values
