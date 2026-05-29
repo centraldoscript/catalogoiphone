@@ -50,7 +50,8 @@ insert into public.assistance_sections (id, name, sort_order) values
   ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f2b', 'Bateria', 2),
   ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f3c', 'Vidro Traseiro', 3),
   ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f4d', 'Reparos em Placa', 4),
-  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f5e', 'Xiaomi', 5)
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f5e', 'Xiaomi', 5),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f6f', 'Vidro Watch', 6)
 on conflict (id) do update set name = excluded.name, sort_order = excluded.sort_order;
 
 -- Seeds oficiais para Preços (Tela)
@@ -116,3 +117,13 @@ insert into public.assistance_prices (section_id, main_model, secondary_models, 
   ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f4d', 'iPhone 13', null, 890.00, 12),
   ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f4d', 'iPhone 13 Pro', null, 1100.00, 13),
   ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f4d', 'iPhone 13 Pro Max', null, 1200.00, 14);
+
+-- Seeds oficiais para Preços (Vidro Watch)
+insert into public.assistance_prices (section_id, main_model, secondary_models, price, sort_order) values
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f6f', 'Series 3', '42 / 38mm', 350.00, 1),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f6f', 'Series 4', '40 / 44mm', 370.00, 2),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f6f', 'Series 5', '40 / 44mm', 450.00, 3),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f6f', 'Series 6', '40 / 44mm', 550.00, 4),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f6f', 'Series 7', '45 / 41mm', 650.00, 5),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f6f', 'Series 8', '45 / 41mm', 650.00, 6),
+  ('d1f5e8f4-6a2c-4b5a-9e7d-1c3b5a7e9f6f', 'Ultra', '49mm', 999.00, 7);
