@@ -1846,16 +1846,26 @@ select option {
   }
   .header-actions {
     width: 100%;
-    flex-direction: column;
-    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
   }
   header .search-bar {
-    max-width: 100%;
-    width: 100%;
+    flex: 1;
+    max-width: none;
+    width: auto;
     height: 38px;
+    padding: 0 12px;
   }
   .btn-header-assistance {
-    width: 100%;
+    flex-shrink: 0;
+    padding: 8px 12px;
+    font-size: 12px;
+    height: 38px;
+    border-radius: 19px;
+    display: flex;
+    align-items: center;
     justify-content: center;
   }
   .footer-title {
