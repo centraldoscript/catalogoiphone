@@ -109,6 +109,28 @@ export default function AssistancePage() {
             ))}
           </div>
         )}
+
+        {!loading && (
+          <div className="assistance-xiaomi-card">
+            <div className="xiaomi-card-content">
+              <span className="xiaomi-badge">Xiaomi</span>
+              <h2>Consertos de Xiaomi</h2>
+              <p>Oferecemos manutenção especializada para toda a linha Redmi, Poco e Mi. Troca de telas, baterias, conectores de carga e reparos avançados em placa com garantia e peças de alta qualidade.</p>
+              <div className="xiaomi-status">Preços Sob Consulta</div>
+              <a
+                href={`https://wa.me/${whatsapp}?text=${encodeURIComponent("Olá! Gostaria de fazer um orçamento para assistência técnica de um aparelho Xiaomi.")}`}
+                target="_blank"
+                rel="noreferrer"
+                className="xiaomi-btn-wa"
+              >
+                <span>Falar com Técnico</span>
+              </a>
+            </div>
+            <div className="xiaomi-card-decoration">
+              <div className="xiaomi-glow"></div>
+            </div>
+          </div>
+        )}
       </main>
 
       <footer className="catalog-footer">
