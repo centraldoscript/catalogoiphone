@@ -1124,7 +1124,19 @@ select option {
 .filter-bar {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+}
+
+.filter-fixed-col {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.filter-scrollable-col {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .search-bar {
@@ -1867,6 +1879,43 @@ select option {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .filter-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    overflow: hidden;
+  }
+  .filter-fixed-col {
+    flex-shrink: 0;
+  }
+  .filter-scrollable-col {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-right: 15px;
+  }
+  .filter-scrollable-col::-webkit-scrollbar {
+    display: none;
+  }
+  .filter-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+    gap: 5px;
+    white-space: nowrap;
+  }
+  .filter-btn svg {
+    width: 13px !important;
+    height: 13px !important;
   }
   .footer-title {
     font-size: 34px;

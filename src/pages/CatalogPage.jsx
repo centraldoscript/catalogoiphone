@@ -158,27 +158,31 @@ export default function CatalogPage() {
             <div className="catalog-controls">
               {activeCategories.length > 0 ? (
                 <div className="filter-bar">
-                  <button
-                    className={`filter-btn ${selectedCategory === 'all' ? 'active' : ''}`}
-                    onClick={() => setSelectedCategory('all')}
-                  >
-                    <Package size={16} /> Todos
-                  </button>
-                  {activeCategories.map(cat => (
+                  <div className="filter-fixed-col">
                     <button
-                      key={cat.id}
-                      className={`filter-btn ${selectedCategory === cat.id ? 'active' : ''}`}
-                      onClick={() => {
-                        if (cat.slug === 'assistencia') {
-                          navigate('/assistencia')
-                        } else {
-                          setSelectedCategory(cat.id)
-                        }
-                      }}
+                      className={`filter-btn ${selectedCategory === 'all' ? 'active' : ''}`}
+                      onClick={() => setSelectedCategory('all')}
                     >
-                      <CategoryIcon name={cat.icon} size={16} /> {cat.name}
+                      <Package size={16} /> Todos
                     </button>
-                  ))}
+                  </div>
+                  <div className="filter-scrollable-col">
+                    {activeCategories.map(cat => (
+                      <button
+                        key={cat.id}
+                        className={`filter-btn ${selectedCategory === cat.id ? 'active' : ''}`}
+                        onClick={() => {
+                          if (cat.slug === 'assistencia') {
+                            navigate('/assistencia')
+                          } else {
+                            setSelectedCategory(cat.id)
+                          }
+                        }}
+                      >
+                        <CategoryIcon name={cat.icon} size={16} /> {cat.name}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               ) : <div />}
             </div>
